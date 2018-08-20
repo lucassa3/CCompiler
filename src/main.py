@@ -1,7 +1,7 @@
 from parser_temp import Parser
 
 def main():
-	input_data = "   3+3*3-2"
+	input_data = "/* bla   */ 4*3+3    /* bla   */"
 
 	Parser.tokens.origin = input_data
 	result = Parser.parse_expression()

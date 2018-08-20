@@ -32,6 +32,15 @@ class Tokenizer():
 				elif self.origin[self.position] == "\n":
 					self.position+=1
 					self.line_number += 1
+
+				elif self.origin[self.position] == "/" and self.origin[self.position+1] == "*":
+					while not (self.origin[self.position] == "*" and self.origin[self.position+1] == "/"):
+						if self.position < len(self.origin)-1:	
+							self.position += 1
+
+						else:
+							raise ValueError("Invalid token")
+					self.position += 2
 				
 				else:
 					is_dirty = False
