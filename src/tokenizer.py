@@ -4,6 +4,8 @@ from token import Token
 SINGLE_CHAR = {
 	"+": "PLUS",
 	"-": "MINUS",
+	"*": "MULT",
+	"/": "DIV"
 }
 
 class Tokenizer():
