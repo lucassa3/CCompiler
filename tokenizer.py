@@ -1,6 +1,11 @@
 from string import ascii_letters, digits
 from token import Token
 
+SINGLE_CHAR = {
+	"+": "PLUS",
+	"-": "MINUS",
+}
+
 class Tokenizer():
 
 	def __init__(self):
@@ -14,9 +19,29 @@ class Tokenizer():
 	def _isalpha(self, token):
 		return token.isalpha()
 
+	def _isdirty(self):
+		is_dirty = True
+		while is_dirty:
+			if self.position < len(self.origin):
+
+				if self.origin[self.position] == " ":
+					self.position += 1
+
+				elif self.origin[self.position] == "\n":
+					self.position+=1
+					self.line_number += 1
+				
+				else:
+					is_dirty = False
+			else:
+				is_dirty = False
+
 	def next(self):
 		aux = ""
-		if self.position < len(self.origin)-1:
+
+		self._isdirty()
+
+		if self.position < len(self.origin):
 
 			if self._isnumber(self.origin[self.position]):
 				while self._isnumber(self.origin[self.position]):
@@ -31,19 +56,11 @@ class Tokenizer():
 				self.current = Token("NUMBER", int(aux))
 				aux = ""
 
-			elif self.origin[self.position] == "+":
-				self.current = Token("PLUS")
-				self.position += 1
-
-			elif self.origin[self.position] == "-":
-				self.current = Token("MINUS")
+			elif self.origin[self.position] in SINGLE_CHAR:
+				self.current = Token(SINGLE_CHAR[self.origin[self.position]])
 				self.position += 1
 
 			else:
-				raise ValueError("nao identifiquei algum caracter durante o calculo :(")
+				raise ValueError(f"invalid token {self.origin[self.position]}")
 		else:
 			self.current = None
-
-
-
-

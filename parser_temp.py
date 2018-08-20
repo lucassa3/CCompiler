@@ -1,5 +1,4 @@
 from tokenizer import Tokenizer
-from preprocessing import PreProcessing
 
 class Parser():
 	
@@ -8,9 +7,13 @@ class Parser():
 	def parse_expression():
 		result = 0
 		Parser.tokens.next()
+		
 		if Parser.tokens.current.type == "NUMBER":
 			result += Parser.tokens.current.value
 			Parser.tokens.next()
+
+		else:
+			raise ValueError(f"Expecting NUMBER. Got: {Parser.tokens.current.type}")
 
 		while Parser.tokens.current != None and (Parser.tokens.current.type == "PLUS" or Parser.tokens.current.type == "MINUS"):
 			if Parser.tokens.current.type == "PLUS":
@@ -20,6 +23,10 @@ class Parser():
 					result += Parser.tokens.current.value
 					Parser.tokens.next()
 
+				else:
+					raise ValueError(f"Expecting Number. Got: {Parser.tokens.current.type}")
+			
+
 			elif Parser.tokens.current.type == "MINUS":
 				Parser.tokens.next()
 
@@ -27,15 +34,10 @@ class Parser():
 					result -= Parser.tokens.current.value
 					Parser.tokens.next()
 
+				else:
+					raise ValueError(f"Expecting Number. Got: {Parser.tokens.current.type}")
+			
+			else:
+				raise ValueError(f"Expecting an operator. Got: {Parser.tokens.current.type}")
+
 		return result
-
-def main():
-	input_data = "   10   +  20 +  30 +   100 -   60     +    321"
-	preproc  = PreProcessing()
-	preproc.program_string = input_data
-	Parser.tokens.origin = preproc.preprocess()
-	result = Parser.parse_expression()
-	print(result)
-
-if __name__ == "__main__":
-	main()

@@ -1,10 +1,9 @@
-#unused file for now
-
-
-from parser import Parser
+from parser_temp import Parser
 
 def main():
-	Parser.tokens.origin = "2+33"
+	input_data = "   10   +  20 +  30 +   100 -   60     +    321"
+
+	Parser.tokens.origin = input_data
 	result = Parser.parse_expression()
 	print(result)
 
