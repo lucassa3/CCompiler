@@ -39,7 +39,7 @@ class Tokenizer():
 							self.position += 1
 
 						else:
-							raise ValueError("Invalid token")
+							raise ValueError("Unterminated Comment")
 					self.position += 2
 				
 				else:
