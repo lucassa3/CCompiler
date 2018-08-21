@@ -29,7 +29,10 @@ class Parser():
 			else:
 				raise ValueError(f"Expecting an operator. Got: {Parser.tokens.current.type}")
 
-		return result
+		if Parser.tokens.current == None:
+			return result
+		else:
+			raise ValueError(f"Could not complete the operation, please check your syntax")
 
 	def parse_term():
 		result = 0
