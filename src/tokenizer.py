@@ -5,7 +5,10 @@ SINGLE_CHAR = {
 	"+": "PLUS",
 	"-": "MINUS",
 	"*": "MULT",
-	"/": "DIV"
+	"/": "DIV",
+	"(": "OPEN_PAR",
+	")": "CLOSE_PAR",
+
 }
 
 class Tokenizer():

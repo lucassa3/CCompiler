@@ -1,7 +1,7 @@
 from parser_temp import Parser
 
 def main():
-	input_data = "   /* oi */1111+2+3-2 /*  asdkasdl;k;lk */    /**/"
+	input_data = "/*asl;dkas;dlk   lkl*/  +2) /**/"
 
 	Parser.tokens.origin = input_data
 	result = Parser.parse_expression()

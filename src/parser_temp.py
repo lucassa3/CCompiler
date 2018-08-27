@@ -29,7 +29,9 @@ class Parser():
 			else:
 				raise ValueError(f"Expecting an operator. Got: {Parser.tokens.current.type}")
 
-		if Parser.tokens.current == None:
+
+
+		if Parser.tokens.current == None or Parser.tokens.current.type == "CLOSE_PAR": #vai dar errado, mas wahtever
 			return result
 		else:
 			raise ValueError(f"Could not complete the operation, please check your syntax")
@@ -37,36 +39,60 @@ class Parser():
 	def parse_term():
 		result = 0
 		
-		if Parser.tokens.current.type == "NUMBER":
-			result += Parser.tokens.current.value
-			Parser.tokens.next()
-
-		else:
-			raise ValueError(f"Expecting NUMBER. Got: {Parser.tokens.current.type}")
+		result = Parser.parse_factor()
 
 		while Parser.tokens.current != None and (Parser.tokens.current.type == "MULT" or Parser.tokens.current.type == "DIV"):
 			if Parser.tokens.current.type == "MULT":
 				Parser.tokens.next()
 
-				if Parser.tokens.current.type == "NUMBER":
-					result *= Parser.tokens.current.value
-					Parser.tokens.next()
-
-				else:
-					raise ValueError(f"Expecting Number. Got: {Parser.tokens.current.type}")
+				result *= Parser.parse_factor()
 			
 
 			elif Parser.tokens.current.type == "DIV":
 				Parser.tokens.next()
 
-				if Parser.tokens.current.type == "NUMBER":
-					result //= Parser.tokens.current.value
-					Parser.tokens.next()
-
-				else:
-					raise ValueError(f"Expecting Number. Got: {Parser.tokens.current.type}")
+				result //= Parser.parse_factor()
 			
 			else:
 				raise ValueError(f"Expecting an operator. Got: {Parser.tokens.current.type}")
+
+		return result
+
+
+	def parse_factor():
+		result = 0
+
+		if Parser.tokens.current.type == "NUMBER":
+
+			result += Parser.tokens.current.value
+			Parser.tokens.next()
+
+		elif Parser.tokens.current.type == "MINUS":
+			Parser.tokens.next()
+			result_factor = Parser.parse_factor()
+			result -= result_factor
+
+		elif Parser.tokens.current.type == "PLUS":
+			Parser.tokens.next()
+			result_factor = Parser.parse_factor()
+			result += result_factor
+
+
+		elif Parser.tokens.current.type == "OPEN_PAR":
+			result_factor = Parser.parse_expression()
+			result += result_factor
+
+			if Parser.tokens.current != None:
+				if Parser.tokens.current.type == "CLOSE_PAR":
+					Parser.tokens.next()
+				else:
+					raise ValueError(f"Expecting Closing Parenthesis")
+
+			else:	
+				raise ValueError(f"Expecting Closing Parenthesis")
+
+
+		else:
+			raise ValueError(f"Expecting Number. Got: {Parser.tokens.current.type}")
 
 		return result
