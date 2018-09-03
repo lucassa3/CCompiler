@@ -1,4 +1,8 @@
 from tokenizer import Tokenizer
+from binop import BinOp
+from unop import UnOp
+from intval import IntVal
+
 
 OPERATORS = ["MULT", "DIV", "PLUS", "MINUS"]
 
@@ -13,21 +17,15 @@ class Parser():
 		result = Parser.parse_term()
 
 		while Parser.tokens.current != None and (Parser.tokens.current.type == "PLUS" or Parser.tokens.current.type == "MINUS"):
-			if Parser.tokens.current.type == "PLUS":
-				Parser.tokens.next()
+			result_cp = result
+			result = BinOp(Parser.tokens.current.type)
 
-				term_result = Parser.parse_term()
-				result += term_result
+			Parser.tokens.next()
+
 			
-
-			elif Parser.tokens.current.type == "MINUS":
-				Parser.tokens.next()
-
-				term_result = Parser.parse_term()
-				result -= term_result
 			
-			else:
-				raise ValueError(f"Expecting an operator. Got: {Parser.tokens.current.type}")
+			result.set_child(result_cp)
+			result.set_child(Parser.parse_term())
 
 		return result
 
@@ -37,19 +35,14 @@ class Parser():
 		result = Parser.parse_factor()
 
 		while Parser.tokens.current != None and (Parser.tokens.current.type == "MULT" or Parser.tokens.current.type == "DIV"):
-			if Parser.tokens.current.type == "MULT":
-				Parser.tokens.next()
+			result_cp = result
+			result = BinOp(Parser.tokens.current.type)
+			Parser.tokens.next()
 
-				result *= Parser.parse_factor()
 			
-
-			elif Parser.tokens.current.type == "DIV":
-				Parser.tokens.next()
-
-				result //= Parser.parse_factor()
 			
-			else:
-				raise ValueError(f"Expecting an operator. Got: {Parser.tokens.current.type}")
+			result.set_child(result_cp)
+			result.set_child(Parser.parse_factor())
 
 		return result
 
@@ -59,23 +52,22 @@ class Parser():
 
 		if Parser.tokens.current.type == "NUMBER":
 
-			result += Parser.tokens.current.value
+			result = IntVal(Parser.tokens.current.value)
 			Parser.tokens.next()
 
 		elif Parser.tokens.current.type == "MINUS":
 			Parser.tokens.next()
-			result_factor = Parser.parse_factor()
-			result -= result_factor
+			result = UnoOp(Parser.tokens.current.type)
+			result.set_child(Parser.parse_factor())
 
 		elif Parser.tokens.current.type == "PLUS":
 			Parser.tokens.next()
-			result_factor = Parser.parse_factor()
-			result += result_factor
+			result = UnoOp(Parser.tokens.current.type)
+			result.set_child(Parser.parse_factor())
 
 
 		elif Parser.tokens.current.type == "OPEN_PAR":
-			result_factor = Parser.parse_expression()
-			result += result_factor
+			result = Parser.parse_expression()
 
 			if Parser.tokens.current != None:
 				if Parser.tokens.current.type == "CLOSE_PAR":
