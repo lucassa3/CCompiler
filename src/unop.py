@@ -1,8 +1,8 @@
 from node import Node
 
 class UnOp(Node):
-	def eval(self):
-		a = self.children[0].eval()
+	def eval(self, st):
+		a = self.children[0].eval(st)
 
 		if self.value == "MINUS":
 			return -a

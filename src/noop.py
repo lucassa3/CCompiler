@@ -1,5 +1,5 @@
 from node import Node
 
-class IntVal(Node):
+class NoOp(Node):
 	def eval(self, st):
-		return self.value
+		return None

@@ -1,1 +1,11 @@
-/*as;dkasdk*/ 2+2*(3+5) /*asdasd*/
+{
+    {
+        x=2;
+        printf(x);
+    };
+    {
+        x=5;
+        printf(x);
+    };
+    x=3;
+}
