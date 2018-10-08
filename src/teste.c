@@ -1,11 +1,13 @@
 {
-    {
-        x=2;
+    x = scanf();
+    while(x > 1 && x > 2) {
+        printf(x);
+        x = x - 1;
+    };
+    if(x >= 3) {
         printf(x);
     };
-    {
-        x=5;
-        printf(x);
-    };
-    x=3;
+    /* if(x <= 8) {
+    //     printf(x);
+    // };*/
 }

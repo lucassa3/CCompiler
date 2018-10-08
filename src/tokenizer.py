@@ -4,7 +4,11 @@ from token import Token
 ALLOWED_VARNAME_CHARS = ascii_letters + digits + "_"
 
 RESERVED = {
-    "printf" : "PRINT"
+    "printf" : "PRINT",
+    "while" : "WHILE",
+    "if" : "IF",
+    "else" : "ELSE",
+    "scanf": "SCANF",
 }
 
 SINGLE_CHAR = {
@@ -18,6 +22,18 @@ SINGLE_CHAR = {
     "}": "CLOSE_BLOCK",
     "=": "EQUAL",
     ";": "CMD_END",
+    "<": "LESS",
+    ">": "GREATER",
+
+}
+
+DOUBLE_CHAR = {
+    "==": "EQUALS",
+    "<=": "LE",
+    ">=": "GE",
+    "!=": "DIFFERENT",
+    "&&": "AND",
+    "||": "OR",
 }
 
 class Tokenizer():
@@ -62,7 +78,11 @@ class Tokenizer():
 
         if self.position < len(self.origin):
 
-            if self.origin[self.position] in SINGLE_CHAR:
+            if self.position < len(self.origin)-1 and self.origin[self.position]+self.origin[self.position+1] in DOUBLE_CHAR:
+                self.current = Token(DOUBLE_CHAR[self.origin[self.position]+self.origin[self.position+1]])
+                self.position += 2
+
+            elif self.origin[self.position] in SINGLE_CHAR:
                 self.current = Token(SINGLE_CHAR[self.origin[self.position]])
                 self.position += 1
 

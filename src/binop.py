@@ -13,6 +13,21 @@ class BinOp(Node):
 			return a * b
 		elif self.value == "DIV":
 			return a // b
+		elif self.value == "GREATER":
+			return a > b
+		elif self.value == "LESS":
+			return a < b
+		elif self.value == "GE":
+			return a >= b
+		elif self.value == "LE":
+			return a <= b
+		elif self.value == "EQUALS":
+			return a == b
+		elif self.value == "AND":
+			return a and b
+		elif self.value == "OR":
+			return a or b
+
 		
 
 

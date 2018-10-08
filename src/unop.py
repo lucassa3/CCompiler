@@ -8,3 +8,5 @@ class UnOp(Node):
 			return -a
 		elif self.value == "PLUS":
 			return +a
+		elif self.value == "NOT":
+			return not a
