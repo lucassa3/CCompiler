@@ -22,7 +22,7 @@ assignment = identifier , "=" , (expression | scanf), ";";
 print = "printf" , "(", expression , ")", ";";
 if_else = "if", "(", bool_exp, ")", commands, ["else", commands];
 while = "while", "(", bool_exp, ")", commands;
-vardec = "INT", identifier, ";"
+vardec = "INT", identifier, ";";
 
 bool_exp = bool_term, {"or", bool_term}; 
 bool_term = bool_factor, {"and", bool_factor};
