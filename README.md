@@ -1,34 +1,45 @@
 # CCompiler
 Developing a compiler from scratch for C language
 
+## How to use:
 
-![Alt text](imgs/commands.png?raw=true "Title")
-![Alt text](imgs/command.png?raw=true "Title")
-![Alt text](imgs/assignment.png?raw=true "Title")
-![Alt text](imgs/print.png?raw=true "Title")
-![Alt text](imgs/diagram_01.png?raw=true "Title")
-![Alt text](imgs/diagram_02.png?raw=true "Title")
-![Alt text](imgs/diagram_03.png?raw=true "Title")
-![Alt text](imgs/diagram_04.png?raw=true "Title")
+Simply run:
 
+```
+$ python main.py <filename.c>
+```
 
+* Note: for compatibility reasons, its important to haver python 3.6 or above installed.
+
+## EBNF:
 
 ```ebnf
-commands = "{", command, ";", { command, ";" }, "}" ;
-command = assignment | print | if_else | while | commands ;
-assignment = identifier , "=" , (expression | scanf);
-scanf = "scanf", "(", ")";
-print = "printf" , ( , expression , ) ;
+program = "void", "main", "(", ")", commands;
+commands = "{", {command}, "}" ;
+command = assignment | print | if_else | while | commands | vardec;
+
+assignment = identifier , "=" , (expression | scanf), ";";
+print = "printf" , "(", expression , ")", ";";
+if_else = "if", "(", bool_exp, ")", commands, ["else", commands];
+while = "while", "(", bool_exp, ")", commands;
+vardec = "INT", identifier, ";"
+
+bool_exp = bool_term, {"or", bool_term}; 
+bool_term = bool_factor, {"and", bool_factor};
+bool_factor =  ("not", bool_factor) | rel_expr;
 rel_expr = expression, {("<" | ">" | "=="), expression};
-if = "if", "(", rel_expr, ")", "{", statement, "}" , ["else", "{" statement, "}"];
-while = "while", "(", rel_expr, ")", "{", statement, "}" , ["else", "{" statement, "}"];
-expression = term, { ("+" | "-"), term } ;
-term = factor , { ("*" | "/"), factor } ;
-factor = ("+" | "-") , factor | num | "(" , expression , ")" | identifier ;
-identifier = word, { word | num | "_" } ;
-num = digit, {digit} ;
-word = letter, {letter} ;
-letter = a .. z | A .. Z;
-digit = 0 .. 9;
-type = "bool" | "integer";
+expression = term, { ("+" | "-"), term };
+term = factor , { ("*" | "/"), factor };
+factor = (("+" | "-") , factor) | num | ("(" , expression , ")") | identifier;
+
+scanf = "scanf", "(", ")";
+identifier = letter, { letter | digit | "_" };
+num = digit, {digit};
+letter = "a" .. "Z";
+digit = "0" .. "9";
+type = "void" | "int" | "char";
 ```
+
+## Syntax Diagrams
+
+![Alt text](imgs/syntax_diagram.png?raw=true "SYNTAX DIAGRAM")

@@ -9,6 +9,10 @@ RESERVED = {
     "if" : "IF",
     "else" : "ELSE",
     "scanf": "SCANF",
+    "int" : "INT",
+    "char" : "CHAR",
+    "void" : "VOID",
+    "main" : "MAIN",
 }
 
 SINGLE_CHAR = {
@@ -116,6 +120,10 @@ class Tokenizer():
                     self.current = Token("IDENTIFIER", aux)
 
                 aux = ""
+
+            elif self.origin[self.position] == "'" and self.origin[self.position+2] == "'":
+                self.current = Token("DIGIT", self.origin[self.position+1])
+                self.position += 3
 
 
             else:

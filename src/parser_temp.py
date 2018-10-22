@@ -10,6 +10,7 @@ from commandsnode import CommandsNode
 from condnode import CondNode
 from loopnode import LoopNode
 from scannode import ScanNode
+from vardecnode import VarDecNode
 
 class Parser():
     
@@ -17,39 +18,71 @@ class Parser():
 
     def init_parse():
         Parser.tokens.next()
-        result = Parser.parse_commands()
+        result = Parser.parse_program()
 
         if Parser.tokens.current != None:
             raise ValueError("oops something wr0ng happ3n3d")
         return result
 
+    def parse_program():
+        result = 0
+        if Parser.tokens.current.type == "INT" or Parser.tokens.current.type == "VOID":
+            Parser.tokens.next()
+            
+            if Parser.tokens.current.type == "MAIN":
+                Parser.tokens.next()
+                
+                if Parser.tokens.current.type == "OPEN_PAR":
+                    Parser.tokens.next()
+                    
+                    if Parser.tokens.current.type == "CLOSE_PAR":
+                        Parser.tokens.next()
+                        
+                        if Parser.tokens.current.type == "OPEN_BLOCK":
+                            result = Parser.parse_commands()
+                            Parser.tokens.next()
+                        
+                        else:
+                            raise ValueError(f"Expecting opening block. Got: {Parser.tokens.current.type}")
+                    else:
+                        raise ValueError(f"Expecting closing parenthesis. Got: {Parser.tokens.current.type}")
+                else:
+                    raise ValueError(f"Expecting opening parenthesis. Got: {Parser.tokens.current.type}")
+            else:
+                raise ValueError(f"Expecting main. Got: {Parser.tokens.current.type}")
+        else:
+            raise ValueError(f"Expecting type void. Got: {Parser.tokens.current.type}")
+        
+        return result    
+
+
     def parse_commands():
         if Parser.tokens.current.type == "OPEN_BLOCK":
             result = CommandsNode(Parser.tokens.current.type)
-            result.set_child(Parser.parse_command())
-
-            if Parser.tokens.current.type != "CMD_END":
-                raise ValueError(f"Did not closed command")
-
-            while Parser.tokens.current.type == "CMD_END":
-                result.set_child(Parser.parse_command())
-
+            has_op = True
+            Parser.tokens.next()
+            while has_op:
+                child = Parser.parse_command()
+                result.set_child(child)
+                if isinstance(child, NoOp):
+                    has_op = False
 
             if Parser.tokens.current.type != "CLOSE_BLOCK":
-                 raise ValueError(f"Did not close block")
+                raise ValueError(f"Expecting closing block. Got: {Parser.tokens.current.type}")
 
         else:
-            raise ValueError(f"Did not open block")
-
-
+            raise ValueError(f"Expecting closing block. Got: {Parser.tokens.current.type}")
+        
         Parser.tokens.next()
         return result
 
     def parse_command():
-        Parser.tokens.next()
-
         if Parser.tokens.current.type == "PRINT":
             return Parser.parse_print()
+        
+        if Parser.tokens.current.type == "INT" or \
+           Parser.tokens.current.type == "CHAR":
+            return Parser.parse_vardec()
 
         if Parser.tokens.current.type == "IDENTIFIER":
             return Parser.parse_assignment()
@@ -66,6 +99,22 @@ class Parser():
         else:
             return NoOp()
 
+    def parse_vardec():
+        result = 0
+        var_type = Parser.tokens.current.type
+        Parser.tokens.next()
+
+        if Parser.tokens.current.type == "IDENTIFIER":
+            result = VarDecNode(Parser.tokens.current.value, var_type)
+        
+        Parser.tokens.next()
+        
+        if Parser.tokens.current.type != "CMD_END":
+            raise ValueError(f"Expecting CMD_END token. Got: {Parser.tokens.current.type}")
+        
+        Parser.tokens.next()
+        return result
+    
 
     def parse_if_else():
         result = CondNode()
@@ -82,12 +131,7 @@ class Parser():
 
                     if Parser.tokens.current.type == "ELSE":
                         Parser.tokens.next()
-
-                        if Parser.tokens.current.type == "OPEN_BLOCK":
-                            result.set_child(Parser.parse_commands())
-
-                        else:
-                            raise ValueError(f"Expecting opening block. Got: {Parser.tokens.current.type}")
+                        result.set_child(Parser.parse_commands())
 
                 else:
                     raise ValueError(f"Expecting opening block. Got: {Parser.tokens.current.type}")
@@ -196,27 +240,40 @@ class Parser():
             raise ValueError(f"Parse error")
 
         Parser.tokens.next()
+
+        if Parser.tokens.current.type != "CMD_END":
+            raise ValueError(f"Expecting CMD_END token. Got: {Parser.tokens.current.type}")
+
+        Parser.tokens.next()
         return result
 
 
 
     def parse_assignment():
-        # print(Parser.tokens.current.value)
         result = AssignerNode(Parser.tokens.current.value)
         Parser.tokens.next()
 
         if Parser.tokens.current.type =="EQUAL":
             Parser.tokens.next()
 
+            print(Parser.tokens.current.type)
             if Parser.tokens.current.type =="SCANF":
                 result.set_child(Parser.parse_scan())
 
-            else:
+            elif Parser.tokens.current.type == "NUMBER" or Parser.tokens.current.type == "IDENTIFIER":
                 result.set_child(Parser.parse_expression())
+
+            elif Parser.tokens.current.type == "DIGIT":
+                result.set_child(IntVal(Parser.tokens.current.value))
+                Parser.tokens.next()
 
         else:
             raise ValueError(f"Parse error")
 
+        if Parser.tokens.current.type != "CMD_END":
+            raise ValueError(f"Expecting CMD_END token. Got: {Parser.tokens.current.type}")
+
+        Parser.tokens.next()
         return result
 
     def parse_scan():
@@ -295,10 +352,10 @@ class Parser():
                 if Parser.tokens.current.type == "CLOSE_PAR":
                     Parser.tokens.next()
                 else:
-                    raise ValueError(f"Expecting Closing Parenthesis")
+                    raise ValueError(f"Expecting Closing Parenthesis, got: {Parser.tokens.current.type}")
 
             else:   
-                raise ValueError(f"Expecting Closing Parenthesis")
+                raise ValueError(f"Expecting Closing Parenthesis, got: {Parser.tokens.current.type}")
 
 
         else:
