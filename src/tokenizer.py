@@ -12,7 +12,7 @@ RESERVED = {
     "int" : "INT",
     "char" : "CHAR",
     "void" : "VOID",
-    "main" : "MAIN",
+    "return" : "RETURN"
 }
 
 SINGLE_CHAR = {
@@ -28,6 +28,7 @@ SINGLE_CHAR = {
     ";": "CMD_END",
     "<": "LESS",
     ">": "GREATER",
+    ",": "COMMA"
 
 }
 
@@ -74,6 +75,15 @@ class Tokenizer():
                     is_dirty = False
             else:
                 is_dirty = False
+
+    def peek(self):
+        prev_position = self.position
+        prev_current = self.current
+        self.next()
+        result = self.current
+        self.position = prev_position
+        self.current = prev_current
+        return result
 
     def next(self):
         aux = ""

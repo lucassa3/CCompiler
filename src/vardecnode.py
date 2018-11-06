@@ -7,4 +7,6 @@ class VarDecNode(Node):
         self.vartype = vartype
 
     def eval(self, st):
-        st.create_var(self.value, self.vartype)
+    	st.create_var(self.value, self.vartype)
+
+        

@@ -1,11 +1,20 @@
+int mult(int a, int b) {
+  return(a * b);
+}
+
+int div(int a, int b) {
+  return(a / b);
+}
+
 void main() {
     char oi;
     oi = 'x';
     printf(oi);
     
-
-    int x;
+    int x, bolso, naruto, teste;
     x = scanf();
+    teste = div(8, 5);
+    printf(teste);
 
 
 
@@ -36,10 +45,12 @@ void main() {
         x = x - 1; /*sup boyz*/
     }
 
-    int bolso;
     bolso = scanf();
 
-    int naruto;
+    mult(x, bolso);
+
+
+
     naruto = scanf();
 
     if(bolso >= naruto) {
@@ -57,7 +68,7 @@ void main() {
     }
 
     {{{
-        printf(4567);
+        printf(oi);
     }}}
     /*bye bye*/
     {}
