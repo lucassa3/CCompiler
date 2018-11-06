@@ -2,6 +2,10 @@ int mult(int a, int b) {
   return(a * b);
 }
 
+int print_mult(int a, int c) {
+  printf(a * c);
+}
+
 int div(int a, int b) {
   return(a / b);
 }
@@ -47,7 +51,7 @@ void main() {
 
     bolso = scanf();
 
-    mult(x, bolso);
+    print_mult(x, bolso);
 
 
 
