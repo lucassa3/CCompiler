@@ -1,5 +1,5 @@
 # CCompiler
-Developing a compiler from scratch for C language using python
+Developing a compiler from scratch for C language
 
 ## How to use:
 

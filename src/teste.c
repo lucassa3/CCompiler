@@ -1,24 +1,11 @@
-int mult(int a, int b) {
-  return(a * b);
-}
-
-int print_mult(int a, int c) {
-  printf(a * c);
-}
-
-int div(int a, int b) {
-  return(a / b);
-}
-
 void main() {
     char oi;
     oi = 'x';
     printf(oi);
     
-    int x, bolso, naruto, teste;
+
+    int x;
     x = scanf();
-    teste = div(8, 5);
-    printf(teste);
 
 
 
@@ -49,12 +36,10 @@ void main() {
         x = x - 1; /*sup boyz*/
     }
 
+    int bolso;
     bolso = scanf();
 
-    print_mult(x, bolso);
-
-
-
+    int naruto;
     naruto = scanf();
 
     if(bolso >= naruto) {
@@ -72,7 +57,7 @@ void main() {
     }
 
     {{{
-        printf(oi);
+        printf(4567);
     }}}
     /*bye bye*/
     {}
