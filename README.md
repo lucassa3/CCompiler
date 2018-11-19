@@ -3,11 +3,39 @@ Developing a compiler from scratch for C language using python
 
 ## How to use:
 
+### AST (Abstract Symbol Table) version:
+
 Simply run:
 
 ```
 $ python main.py <filename.c>
 ```
+### Assembly generated version:
+
+You need to have nasm installed! To do that. just:
+```
+$ sudo apt install nasm
+```
+
+After that, simply run
+```
+$ python main.py <filename.c>
+```
+
+And if you want to compile you generated asm file:
+```
+$ nasm -f elf32 -o program.o program.asm
+```
+```
+$ ld -m elf_i386 -s -o program program.o
+```
+
+Finally, to execute:
+
+```
+$ ./program
+```
+
 
 * Note: for compatibility reasons, its important to haver python 3.6 or above installed.
 
