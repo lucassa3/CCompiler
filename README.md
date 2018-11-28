@@ -70,11 +70,13 @@ type = "void" | "int" | "char";
 
 ## Syntax Diagrams
 
+### AST version:
+
+![Alt text](imgs/syntax_diagram2.png?raw=true "SYNTAX DIAGRAM")
+
 ### Assembly Version:
 
 ![Alt text](imgs/syntax_diagram.png?raw=true "SYNTAX DIAGRAM")
 
-### AST version:
 
-![Alt text](imgs/syntax_diagram2.png?raw=true "SYNTAX DIAGRAM")
 
